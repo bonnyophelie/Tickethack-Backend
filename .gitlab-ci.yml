@@ -1,0 +1,13 @@
+image: cypress/browsers:node16.18.0-chrome90-ff88
+
+stages:
+  - test
+
+cypress:
+  stage: test
+  only:
+    - main
+  script:
+    - yarn install
+    - yarn start &
+    - yarn test
