@@ -19,7 +19,9 @@ ddosify:
   only:
     - main
   script:
-    - ./ddosify.sh
+    - curl -sSfL https://raw.githubusercontent.com/ddosify/ddosify/master/scripts/install.sh | bash
+    - sleep 5
+    - ddosify -t http://localhost:3000
 
     
 
