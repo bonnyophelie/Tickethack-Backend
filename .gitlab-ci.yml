@@ -1,16 +1,27 @@
+image: cypress/browsers:node16.18.0-chrome90-ff88
+
 before_script:
   - npm install yarn
   - yarn install
+  - yarn start &
 
 cypress:
-  image: cypress/browsers:node16.18.0-chrome90-ff88
   stage: test
   only:
     - main
   script:
     - yarn add cypress
-    - yarn start &
+    - sleep 5
     - yarn test
+
+ddosify:
+  stage: test
+  only:
+    - main
+  script:
+    - curl -sSfL https://raw.githubusercontent.com/ddosify/ddosify/master/scripts/install.sh
+    - sleep 5
+    - ddosify -t http://localhost:3000
 
     
 
