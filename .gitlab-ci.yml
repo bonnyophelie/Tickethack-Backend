@@ -1,28 +1,25 @@
-image: node:latest
-
-before_script:
-  - npm install yarn
-  - yarn install
-  - yarn start &
-
 cypress:
   image: cypress/browsers:node16.18.0-chrome90-ff88
   stage: test
   only:
     - main
   script:
+    - npm install yarn
+    - yarn install
+    - yarn start &
     - yarn add cypress
     - sleep 5
     - yarn test
 
 ddosify:
+  image: alpine:latest
   stage: test
   only:
     - main
   script:
-    - curl -sSfL https://raw.githubusercontent.com/ddosify/ddosify/master/scripts/install.sh | bash
+    - wget https://github.com/ddosify/ddosify/releases/latest/download/ddosify_amd64.apk
+    - apk add --allow-untrusted ddosify_amd64.apk
+    - apk add yarn
+    - yarn start &
     - sleep 5
     - ddosify -t http://localhost:3000
-
-    
-
