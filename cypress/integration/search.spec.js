@@ -2,7 +2,7 @@ describe('Search Endpoint', () => {
 	it('should return trips for valid search parameters', () => {
 		const departure = 'Bruxelles'
 		const arrival = 'Paris'
-		const date = '2023-11-23' // Replace with a valid date
+		const date = '2024-01-11' // Replace with a valid date
 
 		cy.request({
 			method: 'GET',

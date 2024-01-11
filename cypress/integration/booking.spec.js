@@ -1,6 +1,6 @@
 describe('Booking API Tests', () => {
 	it('should create a new booking', () => {
-		const tripId = '....' // Replace with a valid tripId
+		const tripId = '659fd393bdb37429af65848a' // Replace with a valid tripId
 
 		cy.request('POST', '/cart/', { tripId: tripId }).then((response) => {
 			expect(response.status).to.equal(200)
@@ -19,7 +19,7 @@ describe('Booking API Tests', () => {
 
 describe('Booking API Tests', () => {
 	it('should create a new booking', () => {
-		const tripId = '....' // Replace with a valid tripId
+		const tripId = '659fd393bdb37429af65848a' // Replace with a valid tripId
 
 		cy.request('POST', '/cart', { tripId: tripId }).then((response) => {
 			expect(response.status).to.equal(200)
@@ -36,7 +36,7 @@ describe('Booking API Tests', () => {
 	})
 
 	it('should delete a booking by tripId', () => {
-		const tripIdToDelete = '....' // Replace with a valid tripId
+		const tripIdToDelete = '659fd393bdb37429af65848a' // Replace with a valid tripId
 
 		cy.request('DELETE', `/cart/${tripIdToDelete}`).then((response) => {
 			expect(response.status).to.equal(200)
