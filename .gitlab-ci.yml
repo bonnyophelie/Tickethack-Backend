@@ -1,11 +1,10 @@
-image: cypress/browsers:node16.18.0-chrome90-ff88
-
 before_script:
   - npm install yarn
   - yarn install
   - yarn start &
 
 cypress:
+  image: cypress/browsers:node16.18.0-chrome90-ff88
   stage: test
   only:
     - main
