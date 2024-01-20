@@ -1,0 +1,34 @@
+trigger:
+  - main
+
+variables:
+  - group: CONNECTION_STRING
+
+pool:
+  name: test
+
+jobs:
+  - job: build-image
+    steps:
+    - script: |
+        docker login -u $(DOCKER_REGISTRY_USER) -p $(DOCKER_PAT)
+        docker build -t obadahaddad/tickethack --no-cache --build-arg url=$(CONNECTION_STRING) .
+        docker push obadahaddad/tickethack 
+      displayName: "docker login, build & push"
+
+  - job: backend_test
+    steps:
+    - script: | 
+        yarn install 
+        yarn start & 
+        yarn test 
+      displayName: 'Run backend tests'
+
+  - job: ddosify
+    steps:
+    - script: | 
+        yarn install 
+        yarn start & 
+        wget https://github.com/ddosify/ddosify/releases/latest/download/ddosify_amd64.deb 
+        dpkg -i ddosify_amd64.deb ddosify -t http://localhost:3000 
+      displayName: 'Run ddosify'
