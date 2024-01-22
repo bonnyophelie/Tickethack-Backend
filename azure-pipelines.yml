@@ -1,9 +1,6 @@
 trigger:
   - main
 
-variables:
-  - group: CONNECTION_STRING
-
 pool:
   name: test
 
@@ -12,8 +9,8 @@ jobs:
     steps:
     - script: |
         docker login -u $(DOCKER_REGISTRY_USER) -p $(DOCKER_PAT)
-        docker build -t obadahaddad/tickethack --no-cache --build-arg url=$(CONNECTION_STRING) .
-        docker push obadahaddad/tickethack 
+        docker build -t bonnyophelie/tickethack --no-cache --build-arg url=$(CONNECTION_STRING) .
+        docker push bonnyophelie/tickethack 
       displayName: "docker login, build & push"
 
   - job: backend_test
