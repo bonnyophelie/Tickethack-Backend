@@ -4,31 +4,23 @@ trigger:
 pool:
   name: Azure Pool
 
-jobs:
-  - job: build_image
-    steps:
-    - script: | 
-        docker login -u $(DOCKER_REGISTRY_USER) -p $(DOCKER_PAT)
-        docker build -t bonnyophelie/tickethack --no-cache --build-arg url=$(CONNECTION_STRING) .
-        docker push bonnyophelie/tickethack
-      displayName: 'docker login, build and push'
+steps:
+  - script: | 
+      docker login -u $(DOCKER_REGISTRY_USER) -p $(DOCKER_PAT)
+      docker build -t bonnyophelie/tickethack --no-cache --build-arg url=$(CONNECTION_STRING) .
+      docker push bonnyophelie/tickethack
+    displayName: 'docker login, build and push'
 
-  - job: backend_test
-    steps:
-    - script: | 
-        docker run --name tickethack -p 3000:3000 -d bonnyophelie/tickethack
-        yarn add cypress --dev
-        yarn run cypress run 
-      displayName: 'Run backend tests with Cypress and docker image'
+  - script: | 
+      docker run --name tickethack -p 3000:3000 -d bonnyophelie/tickethack
+      yarn add cypress --dev
+      yarn run cypress run 
+    displayName: 'Run backend tests with Cypress and docker image'
 
-  - job: ddosify
-    steps:
-    - script: | 
-        ddosify -t http://localhost:3000 
-      displayName: 'Run ddosify'
+  - script: | 
+      ddosify -t http://localhost:3000 
+    displayName: 'Run ddosify'
   
-  - job: cleanup_image
-    steps:
-    - script: | 
-        docker stop tickethack && docker rm tickethack && docker rmi bonnyophelie/tickethack
-      displayName: 'Stop delete container and remove image'
+  - script: | 
+      docker stop tickethack && docker rm tickethack && docker rmi bonnyophelie/tickethack
+    displayName: 'Stop delete container and remove image'
