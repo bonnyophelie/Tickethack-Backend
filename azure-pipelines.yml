@@ -5,19 +5,30 @@ pool:
   name: Azure Pool
 
 jobs:
+  - job: build_image
+    steps:
+    - script: | 
+        docker login -u $(DOCKER_REGISTRY_USER) -p $(DOCKER_PAT)
+        docker build -t bonnyophelie/tickethack --no-cache --build-arg url=$(CONNECTION_STRING) .
+        docker push bonnyophelie/tickethack
+      displayName: 'docker login, build and push'
+
   - job: backend_test
     steps:
     - script: | 
-        yarn install 
-        yarn start & 
-        yarn test 
-      displayName: 'Run backend tests'
+        docker run --name tickethack -p 3000:3000 -d bonnyophelie/tickethack
+        yarn add cypress --dev
+        yarn run cypress run 
+      displayName: 'Run backend tests with Cypress and docker image'
 
   - job: ddosify
     steps:
     - script: | 
-        yarn install 
-        yarn start & 
-        wget https://github.com/ddosify/ddosify/releases/latest/download/ddosify_amd64.deb 
-        dpkg -i ddosify_amd64.deb ddosify -t http://localhost:3000 
+        ddosify -t http://localhost:3000 
       displayName: 'Run ddosify'
+  
+  - job: cleanup_image
+    steps:
+    - script: | 
+        docker stop tickethack && docker rm tickethack && docker rmi bonnyophelie/tickethack
+      displayName: 'Stop, delete container and remove image'
