@@ -31,4 +31,4 @@ jobs:
     steps:
     - script: | 
         docker stop tickethack && docker rm tickethack && docker rmi bonnyophelie/tickethack
-      displayName: 'Stop, delete container and remove image'
+      displayName: 'Stop delete container and remove image'
