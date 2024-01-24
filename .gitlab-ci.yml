@@ -1,5 +1,5 @@
 cypress:
-  image: cypress/browsers:node16.18.0-chrome90-ff88
+  image: docker.io/bonnyophelie/tickethack
   stage: test
   only:
     - main
